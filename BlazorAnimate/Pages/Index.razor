@@ -35,23 +35,37 @@
             TextString = "B",
             Path = new BezierCurve()
             {
-                StartPoint = new PointF(10, 300),
+                StartPoint = new PointF(10, 305),
                 ControlPoint1 = new PointF(-10, 164),
                 ControlPoint2 = new PointF(245, 166),
                 EndPoint = new PointF(235, 300)
             },
-            DrawPath = drawpath
-        });
+            DrawPath = drawpath,
+            Color = "#ffb6b3"
+        }); ;
 
         animation.Words.Add(new Word()
         {
             TextString = "rowser",
             Path = new BezierCurve()
             {
-                StartPoint = new PointF(35, 300),
+                StartPoint = new PointF(53, 300),
                 ControlPoint1 = new PointF(35, 300),
                 ControlPoint2 = new PointF(35, 300),
                 EndPoint = new PointF(35, 900)
+            },
+            DrawPath = drawpath,
+        });
+
+        animation.Words.Add(new Word()
+        {
+            TextString = "+",
+            Path = new BezierCurve()
+            {
+                StartPoint = new PointF(280, 300),
+                ControlPoint1 = new PointF(70, 300),
+                ControlPoint2 = new PointF(70, 300),
+                EndPoint = new PointF(100, 1300)
             },
             DrawPath = drawpath
         });
@@ -61,12 +75,12 @@
             TextString = "R",
             Path = new BezierCurve()
             {
-                StartPoint = new PointF(350, 300),
+                StartPoint = new PointF(320, 300),
                 ControlPoint1 = new PointF(350, 300),
                 ControlPoint2 = new PointF(350, 300),
                 EndPoint = new PointF(350, 900)
             },
-            DrawPath = drawpath,
+            DrawPath = drawpath
         });
 
         animation.Words.Add(new Word()
@@ -80,6 +94,7 @@
                 EndPoint = new PointF(295, 300)
             },
             DrawPath = drawpath,
+            Color = "#ffb6b3"
         });
 
         animation_l.Words.Add(new Word()
@@ -93,17 +108,29 @@
                 EndPoint = new PointF(280, 300)
             },
             DrawPath = drawpath,
+            Color = "#ffb6b3"
         });
 
         Animations.Add(animation);
         Animations.Add(animation_l);
         Animations.Add(animation_r);
 
-        await SetInterval(() => animate(), TimeSpan.FromMilliseconds(1000 / fps));
+        animate();
 
+        await Task.Delay(2000).ContinueWith(async a => {
+            await SetInterval(() => animate(), TimeSpan.FromMilliseconds(1000 / fps));
+        });
     }
 
-    public static async Task SetInterval(Action action, TimeSpan timeout)
+    async void clearCanvas()
+    {
+        await ctx.ClearRectAsync(0, 0, 700, 600);
+        await ctx.SetFillStyleAsync(backgroundcolor);
+        await ctx.FillRectAsync(0, 0, 700, 600);
+        await ctx.SetLineWidthAsync(5);
+    }
+
+    async Task SetInterval(Action action, TimeSpan timeout)
     {
         await Task.Delay(timeout).ConfigureAwait(false);
 
@@ -111,8 +138,6 @@
 
         await SetInterval(action, timeout);
     }
-
-
 
     async void animate()
     {

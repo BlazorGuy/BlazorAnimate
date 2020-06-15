@@ -8,9 +8,11 @@ namespace BlazorAnimate.Services
     {
         public async void DrawText(Canvas2DContext ctx, Word word)
         {
-            await ctx.SetFillStyleAsync("#ffffff");
-            await ctx.SetFontAsync("70px Arial");
+            await ctx.SaveAsync();
+            await ctx.SetFillStyleAsync(word.Color);
+            await ctx.SetFontAsync(word.Font);
             await ctx.FillTextAsync(word.TextString, word.Location.X, word.Location.Y);
+            await ctx.RestoreAsync();
         }
     }
 }
