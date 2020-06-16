@@ -6,7 +6,37 @@
 @inject BezierCurveService bcs;
 @inject AnimationService animationservice;
 
-<BECanvas Width="700" Height="600" @ref="_canvasReference"></BECanvas>
+    <style>
+        .content.px-4{
+            padding:0px !important;
+        }
+    </style>
+
+
+    <div class="row" style="margin-bottom:15px">
+        <div class="col-sm-1">
+            <button type="button" class="btn btn-primary" @onclick="Restart">Restart</button>
+        </div>
+        <div class="col-sm-1">
+            <div class="custom-control custom-checkbox" style="padding-top:15px">
+                <input type="checkbox" class="custom-control-input" id="ShowPaths" @onchange="ToggleDrawPaths">
+                <label class="custom-control-label" for="ShowPaths">Show Paths</label>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div class="custom-control custom-checkbox" style="padding-top:15px">
+                <input type="checkbox" class="custom-control-input" id="ToggleLoopBack" @onchange="ToggleLoopBack">
+                <label class="custom-control-label" for="ToggleLoopBack">Reverse Loop</label>
+            </div>
+        </div>
+    </div>
+<div class="row">
+    <div class="col-sm">
+        <BECanvas Width="700" Height="600" @ref="_canvasReference"></BECanvas>
+    </div>
+</div>
+
+
 
 @code{
     private Canvas2DContext ctx;
@@ -21,6 +51,8 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (!firstRender) return;
+
         ctx = await _canvasReference.CreateCanvas2DAsync();
 
         var animation = new Animation();
@@ -122,14 +154,6 @@
         });
     }
 
-    async void clearCanvas()
-    {
-        await ctx.ClearRectAsync(0, 0, 700, 600);
-        await ctx.SetFillStyleAsync(backgroundcolor);
-        await ctx.FillRectAsync(0, 0, 700, 600);
-        await ctx.SetLineWidthAsync(5);
-    }
-
     async Task SetInterval(Action action, TimeSpan timeout)
     {
         await Task.Delay(timeout).ConfigureAwait(false);
@@ -141,18 +165,34 @@
 
     async void animate()
     {
-        // redraw path
         await ctx.ClearRectAsync(0, 0, 700, 600);
         await ctx.SetFillStyleAsync(backgroundcolor);
         await ctx.FillRectAsync(0, 0, 700, 600);
-        await ctx.SetLineWidthAsync(5);
+
+        bool allcomplete = true;
 
         foreach (Animation a in Animations)
         {
-            animationservice.Animate(a, loopback);
+            animationservice.Animate(a);
             animationservice.Draw(ctx,a);
+            if (a.Percent != 100 && a.Percent !=0) allcomplete = false;
         }
+
+        if (allcomplete && loopback)
+            Animations.ForEach(a => a.Speed *= -1);
     }
 
+    void Restart(){
+        Animations.ForEach(a => a.Percent = 0);
+    }
 
+    void ToggleLoopBack()
+    {
+        loopback = !loopback;
+    }
+
+    void ToggleDrawPaths()
+    {
+        Animations.ForEach(a => a.Words.ForEach(w=>w.DrawPath = !w.DrawPath));
+    }
 }

@@ -13,10 +13,11 @@ namespace BlazorAnimate.Services
 
         public async void DrawCurve(Canvas2DContext ctx, BezierCurve curve)
         {
+            await ctx.SetLineWidthAsync(3);
             await ctx.BeginPathAsync();
             await ctx.MoveToAsync(curve.StartPoint.X, curve.StartPoint.Y);
             await ctx.BezierCurveToAsync(curve.ControlPoint1.X,curve.ControlPoint1.Y,curve.ControlPoint2.X, curve.ControlPoint2.Y,curve.EndPoint.X,curve.EndPoint.Y);
-            await ctx.SetStrokeStyleAsync("blue");
+            await ctx.SetStrokeStyleAsync("Yellow");
             await ctx.StrokeAsync();
         }
 

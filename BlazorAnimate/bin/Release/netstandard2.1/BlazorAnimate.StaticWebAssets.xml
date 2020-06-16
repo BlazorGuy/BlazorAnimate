@@ -1,0 +1,4 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="/" Path="C:\Users\bcollins\Desktop\BlazorGuy\BlazorAnimate\BlazorAnimate\bin\Release\netstandard2.1\wwwroot\" />
+  <ContentRoot BasePath="_content/Blazor.Extensions.Canvas" Path="C:\Users\bcollins\.nuget\packages\blazor.extensions.canvas\1.0.0\build\..\staticwebassets\" />
+</StaticWebAssets>

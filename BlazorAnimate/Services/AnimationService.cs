@@ -15,20 +15,14 @@ namespace BlazorAnimate.Services
             wordService = (WordService)serviceProvider.GetService(typeof(WordService));
         }
 
-        public void Animate(Animation animation, bool loopback = false)
+        public void Animate(Animation animation)
         {
             animation.Percent += animation.Speed;
 
             if (animation.Percent < 0)
-            {
                 animation.Percent = 0;
-                if (loopback) animation.Speed *= -1;
-            }
             else if (animation.Percent > 100)
-            {
                 animation.Percent = 100;
-                if (loopback) animation.Speed *= -1;
-            };
 
         }
 
