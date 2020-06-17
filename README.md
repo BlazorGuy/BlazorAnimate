@@ -6,4 +6,4 @@ See it in action - [Demo](https://blazorguy.net/simple-text-animation/)
 
 ![Blazor Canvas Animation](https://blazorguy.net/Blazor/BlazorAnimate/Blazor.gif)
 
-https://blazorguy.net/
+Developers Blog: https://blazorguy.net/
